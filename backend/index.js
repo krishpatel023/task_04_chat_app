@@ -18,6 +18,7 @@ import Users from './routes/User.js'
 import Chats from './routes/Chat.js'
 import Messages from './routes/Message.js'
 import Files from './routes/File.js'
+import Poll from './routes/Poll.js'
 
 app.use(express.json())
 dotenv.config();
@@ -60,10 +61,10 @@ io.on('connection', (socket) => {
         console.log("USER JOINED ROOM " + room);
     })
 
-    socket.on('new message', (msgRecieved, chatDetail)=>{
+    socket.on('new message', (msgRecieved, chatDetail, type)=>{
         var senderId = msgRecieved.senderId     
         // if(senderId === member) return;
-        let msg = {chatDetail,msgRecieved}
+        let msg = {chatDetail,msgRecieved,type}
         socket.in(chatDetail._id).emit("message received", msg )
     })
 
@@ -77,6 +78,7 @@ app.use("/api/users", Users)
 app.use("/api/chats", Chats)
 app.use("/api/messages", Messages)
 app.use("/api/files", Files)
+app.use("/api/polls", Poll)
 
 //BACKEND START
 server.listen(PORT, ()=>{

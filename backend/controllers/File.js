@@ -20,7 +20,6 @@ export const addFileOnly = async (req, res) => {
             chatId : "0"
         })
         await newFile.save();
-        console.log(req.params.type);
         if(req.params.type === "chat"){
             try{
                 await Chat.findOneAndUpdate(
@@ -38,6 +37,9 @@ export const addFileOnly = async (req, res) => {
             }catch(error){
                 console.log(error);
             }
+        }
+        if(req.params.type === "poll"){
+
         }
         res.status(200).send(newFile)
     } catch (error) {

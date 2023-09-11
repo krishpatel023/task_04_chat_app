@@ -6,6 +6,7 @@ import FileComponent from './File/FileComponent';
 import MessageIdentification from './Message/MessageIdentification';
 import FileIdentification from './File/FileIdentification';
 import Loading from '../Loading/Loading';
+import PollIdentification from './Poll/PollIdentification';
 export default function ChatDisplay(props) {
     
     const { user, messages, currentChat } = useContext(GlobalContext)
@@ -32,28 +33,37 @@ export default function ChatDisplay(props) {
       {
           messages && props?
           messages.map((data,i)=>
-          {
-            return (
-              data.type === "message"?
-              <MessageIdentification
-                data={data}
-                user={user}
-                isGroupChat={props.isGroupChat}
-                key={i}
-                isAdmin={isAdmin}
-              />
-              :
-              <FileIdentification
-                data={data}
-                user={user}
-                isGroupChat={props.isGroupChat}
-                key={i}
-                isAdmin={isAdmin}
-              />
-              
-            )
-          }
-
+          
+            <React.Fragment key={i}>
+              {
+                data.type === "message" && 
+                  <MessageIdentification
+                    data={data}
+                    user={user}
+                    isGroupChat={props.isGroupChat}
+                    isAdmin={isAdmin}
+                  />                  
+                
+              }
+              {
+                data.type ==="file" && 
+                  <FileIdentification
+                    data={data}
+                    user={user}
+                    isGroupChat={props.isGroupChat}
+                    isAdmin={isAdmin}
+                  />                  
+                
+              }
+              {
+                data.type === "poll" && 
+                  <PollIdentification
+                    data = {data}
+                    user = {user}
+                    isAdmin={isAdmin}
+                  />
+              }
+            </React.Fragment>
           )
           :null
       }

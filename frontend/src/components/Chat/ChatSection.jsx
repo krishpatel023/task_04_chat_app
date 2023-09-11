@@ -13,11 +13,12 @@ import MenuButton from '@mui/joy/MenuButton';
 import MenuItem from '@mui/joy/MenuItem';
 import FileUploadModal from './FileUploadModal';
 import Loading from '../Loading/Loading';
+import PollCreation from '../../pages/PollCreation';
 // import MoreVert from '@mui/icons-material/MoreVert';
 export default function ChatSection() {
     const [ typedMsg, setTypedMsg ] = useState()
     
-    const { user, currentChat , socketSendMsg , handleTyping, messages, setChatSettings, setDeleteMsg, deleteMsg, handleMsgDelete} = useContext(GlobalContext)
+    const { setIsPollOpen, user, currentChat , socketSendMsg , handleTyping, messages, setChatSettings, setDeleteMsg, deleteMsg, handleMsgDelete} = useContext(GlobalContext)
     const sendMsg = async()=>{
         if(currentChat){
             const msgId = await axios.post(`${backendURL}/api/messages/createMsg/${currentChat._id}`,{
@@ -64,8 +65,14 @@ export default function ChatSection() {
         }
     }
     const handleInputClick = ()=>{
-        document.getElementById('getFile').click()
+        document.getElementById('getImg').click()
     }  
+    const handleFileInputClick = ()=>{
+        document.getElementById('getFile').click()
+    }
+    const handlePollInput = ()=>{
+        setIsPollOpen(true)
+    }   
     const [fileSendDialog, setFileSendDialog] = useState( false)
     const changeFunc = (val)=>{
         setFileSendDialog(val)
@@ -104,8 +111,6 @@ export default function ChatSection() {
         }
     },[currentChat])
 
-
-
   return (
     <>
     <FileUploadModal
@@ -113,6 +118,7 @@ export default function ChatSection() {
         changeFunc={changeFunc}
         handleFileUpload={handleFileUpload}
     />
+    <PollCreation/>
     {
         currentChat?
     
@@ -161,7 +167,8 @@ export default function ChatSection() {
             <Loading/>
             <div className='w-full h-[10%] bg-primary-color flex items-center justify-center gap-4'>
                 <div className='w-[5%] h-[70%] flex justify-center items-center bg-accent-color rounded-lg text-accent-complementary'>
-                <input type="file" id="getFile" className="hidden" onChange={(e)=>{setUploadedFile(e.target.files[0])}}/>
+                <input type="file" id="getImg" accept='image/*' className="hidden" onChange={(e)=>{setUploadedFile(e.target.files[0])}}/>
+                <input type="file" id="getFile" accept="application/pdf" className="hidden" onChange={(e)=>{setUploadedFile(e.target.files[0])}}/>
                     <Dropdown
                     >
                         <MenuButton
@@ -181,10 +188,17 @@ export default function ChatSection() {
                                 </span>
                             </MenuItem>                            
                             <MenuItem
-                                onClick={handleInputClick}
+                                onClick={handleFileInputClick}
                             >
                                 <span className='w-full flex items-center gap-4'>
                                     <i className="fa-solid fa-file"></i>Document
+                                </span>
+                            </MenuItem>
+                            <MenuItem
+                                onClick={handlePollInput}
+                            >
+                                <span className='w-full flex items-center gap-4'>
+                                    <i className="fa-solid fa-bars"></i>Poll
                                 </span>
                             </MenuItem>
                         </Menu>

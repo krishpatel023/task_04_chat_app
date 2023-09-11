@@ -62,7 +62,7 @@ export default function ContextWrapper(props) {
         if(message.msgRecieved.chatId === message.chatDetail._id){
           addMessage({
             ID : message.msgRecieved._id,
-            type : (message.msgRecieved.data ? "message" : "file")
+            type : message.type
           })
         }
         if(message.msgRecieved.chatId !== message.chatDetail._id){
@@ -85,7 +85,7 @@ export default function ContextWrapper(props) {
       ID : msg._id,
       type : type 
     })
-    socket.emit('new message', msg, currentChat)
+    socket.emit('new message', msg, currentChat, type)
   }
 
   const handleTyping = ()=>{
@@ -184,7 +184,12 @@ export default function ContextWrapper(props) {
         setCurrentChat(getChat.data)
       }
     }
-    console.log("DELETE MSG ARR",deleteMsgArr);
+
+
+    // Poll
+
+
+    const [isPollOpen, setIsPollOpen] = useState(false)
 
     const value = {
         messages,
@@ -212,7 +217,10 @@ export default function ContextWrapper(props) {
         setDeleteMsg,
         deleteMsgArr,
         removeDeleteMsg,
-        handleMsgDelete
+        handleMsgDelete,
+
+        isPollOpen,
+        setIsPollOpen
     }
   return (
       <GlobalContext.Provider value={value}>

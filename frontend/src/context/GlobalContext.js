@@ -25,6 +25,8 @@ const GlobalContext = React.createContext({
     setLoading: () => {},
     deleteMsg: 0,
     setDeleteMsg: () => {},
+    isPollOpen: 0,
+    setIsPollOpen: () => {}
 })
 
 export default GlobalContext
